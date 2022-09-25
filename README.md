@@ -1,2 +1,3 @@
-# AI-Challenge-HIT
-Public AI Challenge - Team 10 repository - MeteoTrentino
+# AI Challenge HIT 2022 - Team 10. MeteoTrentino
+
+README WIP
