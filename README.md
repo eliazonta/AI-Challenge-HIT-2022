@@ -5,4 +5,4 @@
 
 * ` /python_code/notebooks/ ` per i notebooks
 * ` /python_code/notebooks/DecisionTree ` codice con il test dell'*albero decisionale*
-* ` /python_code/notebooks/PareAndSplit ` codice per splittare e creare i dataframe con periodo a piacere.
+* ` /python_code/notebooks/AnomalyDetection ` codice per Anomaly Detection sui dati di una singola stazione
