@@ -53,21 +53,23 @@ class BaseModel():
         return self.losses
 
     # ##
-    # def save_weights(self, epoch):
-    #     """Save netG and netD weights for the current epoch.
 
-    #     Args:
-    #         epoch ([int]): Current epoch number.
-    #     """
+    #[ WIP ]
+    def save_weights(self, epoch):
+         """Save netG and netD weights for the current epoch.
 
-    #     weight_dir = os.path.join(self.opt.outf, self.opt.name, 'train', 'weights')
-    #     if not os.path.exists(weight_dir): os.makedirs(weight_dir)
+         Args:
+            epoch ([int]): Current epoch number.
+         """
+
+    weight_dir = os.path.join(self.opt.outf, self.opt.name, 'train', 'weights')
+    if not os.path.exists(weight_dir): os.makedirs(weight_dir)
 
     #     ## together with the weigths and the epoch, also the training and validation windows parameters are stored
-    #     torch.save({'epoch': epoch + 1, 'state_dict': self.ae.state_dict()},
-    #                '%s/AE.pt' % (weight_dir))
+    torch.save({'epoch': epoch + 1, 'state_dict': self.ae.state_dict()},
+                    '%s/AE.pt' % (weight_dir))
 
-    # ##
+    # ## [ WIP ]
     # def load_weights(self):
     #     """Load netG and netD weights.
     #     """
