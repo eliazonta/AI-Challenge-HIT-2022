@@ -1,4 +1,6 @@
-def split_df_for_TSF(df, PERIOD, PREDICTION, dir_to_save):
+import pandas as pd
+
+def split_df_for_TSF_old(df, PERIOD, PREDICTION, dir_to_save):
     """
     Split the dataframe df in train and test, accoding to the time division.
     @df: the dataframe, must have a datetime field
@@ -13,8 +15,7 @@ def split_df_for_TSF(df, PERIOD, PREDICTION, dir_to_save):
 
     finally save the train and the test with a label in the selected directory
     """
-    import pandas as pd
-
+    
     date_min = df['datetime'].min()
 
     date_max = df['datetime'].max()
@@ -35,3 +36,47 @@ def split_df_for_TSF(df, PERIOD, PREDICTION, dir_to_save):
         i = i + 1
         current_data +=  pd.offsets.Hour(PREDICTION)
 
+def split_df_for_TSF(df, PERIOD, PREDICTION):    
+    date_min = df['datetime'].min()
+    date_max = df['datetime'].max()
+    current_data = date_min
+    i = 0
+    data_train = []
+    data_test = []
+    while current_data + pd.offsets.Hour(PERIOD) + pd.offsets.Hour(PREDICTION) <= date_max:
+        # train is the dataframe of 0-24 h
+        train_window = df[ (df['datetime'] <= current_data + pd.offsets.Hour(PERIOD)) & (df['datetime'] > current_data) ]
+        # we do not want anomalies in training windows
+        if((train_window['validation_code'].values != 1).any()):
+            current_data +=  pd.offsets.Hour(PREDICTION)
+            continue
+        
+        header={
+        'sensor_code':train_window['label'].values[0],
+        'in_datetime':train_window['datetime'].values[0],
+        }
+
+        features = train_window['value'].reset_index(drop=True).to_dict()
+
+        # pred is the dataframe of 24-24+1 h
+        test_window  = df[ (df['datetime'] <= current_data  + pd.offsets.Hour(PERIOD) + pd.offsets.Hour(PREDICTION)) & (df['datetime'] > current_data + pd.offsets.Hour(PERIOD))  ]
+        target =  test_window['value'].reset_index(drop=True).to_dict()
+        val_label = test_window['validation_code'].reset_index(drop=True)
+        val_label.index = [f"val_{idx}" for idx in val_label.index] 
+        val_label = val_label.to_dict()
+        # if either features is empty or target, continue
+        data_train.append({**header,**features})
+        data_test.append({**header,**target,**val_label})
+
+        i = i + 1
+        # to avoid too many data 
+        current_data +=  pd.offsets.Hour(PERIOD/6)
+
+    df_train = pd.DataFrame(data_train)
+    df_test = pd.DataFrame(data_test)
+    # remove data with NaN
+    bad_rows = df_train.isnull().values.any(axis=1)
+    df_train = df_train.iloc[~bad_rows]
+    df_test = df_test.iloc[~bad_rows]
+
+    return df_train,df_test
