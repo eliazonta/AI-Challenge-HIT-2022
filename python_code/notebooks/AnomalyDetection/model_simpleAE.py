@@ -53,37 +53,38 @@ class BaseModel():
         return self.losses
 
     # ##
-    # def save_weights(self, epoch):
-    #     """Save netG and netD weights for the current epoch.
 
-    #     Args:
-    #         epoch ([int]): Current epoch number.
-    #     """
+    #Save weights
+    def save_weights(self, epoch):
+        #Save netG and netD weights for the current epoch.
 
-    #     weight_dir = os.path.join(self.opt.outf, self.opt.name, 'train', 'weights')
-    #     if not os.path.exists(weight_dir): os.makedirs(weight_dir)
+         #Args:epoch ([int]): Current epoch number.
+         
+
+        weight_dir = os.path.join(self.opt.outf, self.opt.name, 'train', 'weights')
+        if not os.path.exists(weight_dir): os.makedirs(weight_dir)
 
     #     ## together with the weigths and the epoch, also the training and validation windows parameters are stored
-    #     torch.save({'epoch': epoch + 1, 'state_dict': self.ae.state_dict()},
-    #                '%s/AE.pt' % (weight_dir))
+        torch.save({'epoch': self.opt.epoch + 1, 'state_dict': self.ae.state_dict()},
+                    '%s/AE.pt' % (weight_dir))
 
-    # ##
-    # def load_weights(self):
+    # load weights
+    def load_weights(self):
     #     """Load netG and netD weights.
     #     """
 
-    #     weight_dir = os.path.join(self.opt.outf, self.opt.name, 'train', 'weights','AE.pt')
-    #     pretrained_dict = torch.load(weight_dir)['state_dict']
-    #     training_configuration = torch.load(weight_dir)['training_conf']
-    #     self.opt.training_reg = training_configuration['training_reg']
-    #     self.opt.validation_reg = training_configuration['validation_reg']
-    #     self.opt.iter = torch.load(weight_dir)['epoch']
+        weight_dir = os.path.join(self.opt.outf, self.opt.name, 'train', 'weights','AE.pt')
+        pretrained_dict = torch.load(weight_dir)['state_dict']
+        training_configuration = torch.load(weight_dir)['training_conf']
+        self.opt.training_reg = training_configuration['training_reg']
+        self.opt.validation_reg = training_configuration['validation_reg']
+        self.opt.iter = torch.load(weight_dir)['epoch']
 
-    #     try:
-    #         self.ae.load_state_dict(pretrained_dict)
-    #     except IOError:
-    #         raise IOError("netG weights not found")
-    #     print('   Loaded weights.')
+        try:
+            self.ae.load_state_dict(pretrained_dict)
+        except IOError:
+            raise IOError("netG weights not found")
+        print('   Loaded weights.')
 
     ##
     def train_one_epoch(self):
