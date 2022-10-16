@@ -10,11 +10,11 @@ class AE(nn.Module):
     '''
     def __init__(self,opt):
         super().__init__()
-        self.c1 = nn.Conv1d(1,32,7,padding=2,stride=2)
-        self.c2 = nn.Conv1d(32,16,5,padding=2,stride=2)
+        self.c1 = nn.Conv1d(1,32,7,padding=2,padding_mode='reflect',stride=2)
+        self.c2 = nn.Conv1d(32,16,5,padding=2,padding_mode='reflect',stride=2)
         self.dropout = nn.Dropout(p=0.2)
-        self.d1 = nn.ConvTranspose1d(16,32,5,padding=2,stride=2)
-        self.d2 = nn.ConvTranspose1d(32,1,6,padding=1,stride=2)
+        self.d1 = nn.ConvTranspose1d(16,32,2,stride=2)
+        self.d2 = nn.ConvTranspose1d(32,1,2,stride=2)
 
     def forward(self, x): 
         x1 = self.c1(torch.unsqueeze(x,1))
