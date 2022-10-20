@@ -70,7 +70,7 @@ def split_df_for_TSF(df, PERIOD, PREDICTION):
 
         i = i + 1
         # to avoid too many data 
-        current_data +=  pd.offsets.Hour(PERIOD/6)
+        current_data +=  pd.offsets.Hour(PREDICTION)
 
     df_train = pd.DataFrame(data_train)
     df_test = pd.DataFrame(data_test)
