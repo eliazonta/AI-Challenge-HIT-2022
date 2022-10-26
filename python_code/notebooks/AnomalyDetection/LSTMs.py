@@ -79,29 +79,19 @@ class LSTM(nn.Module):
         c0 = torch.zeros(1, batch_size, self.hidden_dim).requires_grad_()
         x = x.unsqueeze(2)
         # the first part of the output is the already known curve
-        outputs = x[:,0:0+self.moving_window,:]
-        for i in range(x.size(1)-self.moving_window):
-            # as input, the lstm takes the last window made of previous previsions
-            # outputs_window = outputs[:,i:i+self.moving_window,:]
-            # as input takes the ground truth
-            outputs_window = x[:,i:i+self.moving_window,:]
-            _, (h0, c0) = self.lstm(outputs_window, (h0, c0))
+        outputs = x
+
+        for i in range(pred_fut):
+            # this generates future predictions, aslo based on subsequent predictions
+            
+            # selection of the window
+            outputs_window = outputs[:,i:sequence_length+i,:]
+            output, (h0, c0) = self.lstm(outputs_window, (h0, c0))
             output = self.fc(h0[0])
             output = nn.LeakyReLU(negative_slope=0.3)(output)
+            # append the predicted point to the output
             outputs = torch.cat((outputs, output.unsqueeze(2)), dim=1)
-
-        if(pred_fut):
-            for i in range(pred_fut):
-                # this only generates future predictions if we pass in future_preds>0
-                # mirrors the code above, using last output/prediction as input
-                outputs_window = outputs[:,sequence_length-self.moving_window+i:sequence_length+i,:]
-                output, (h0, c0) = self.lstm(outputs_window, (h0, c0))
-                output = self.fc(h0[0])
-                output = nn.LeakyReLU(negative_slope=0.3)(output)
-                outputs = torch.cat((outputs, output.unsqueeze(2)), dim=1)
             
-        # transform list to tensor    
-        # outputs = torch.cat(outputs, dim=1)
         return outputs.squeeze(2)
     
     def init_hidden_and_cell(self, batch_size):
