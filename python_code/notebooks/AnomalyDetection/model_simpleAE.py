@@ -100,7 +100,7 @@ class BaseModel():
             self.total_steps += self.opt.batchsize
             epoch_iter += self.opt.batchsize
             
-            batch_input_features = torch.stack([v["features"] for v in data])
+            batch_input_features = torch.stack([v["features"] for v in data]).to(torch.device("cuda")) #edited by elia 
             self.set_input(batch_input_features)
             self.optimize_params()
 
