@@ -46,8 +46,8 @@ class SingleLSTMCell(nn.Module):
     
     def init_hidden_and_cell(self, batch_size):
         # This method generates the first hidden state of zeros which we'll use in the forward pass
-        hidden = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cpu"))
-        cell = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cpu"))
+        hidden = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
+        cell = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
          # We'll send the tensor holding the hidden state to the device we specified earlier as well
         return hidden,cell
 
@@ -96,7 +96,7 @@ class LSTM(nn.Module):
     
     def init_hidden_and_cell(self, batch_size):
         # This method generates the first hidden state of zeros which we'll use in the forward pass
-        hidden = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cpu"))
-        cell = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cpu"))
+        hidden = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
+        cell = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
          # We'll send the tensor holding the hidden state to the device we specified earlier as well
         return hidden,cell
