@@ -25,7 +25,9 @@ class BaseModel():
         self.dataloader = dataloader
         # self.trn_dir = os.path.join(self.opt.outf, self.opt.name, 'train')
         # self.tst_dir = os.path.join(self.opt.outf, self.opt.name, 'test')
-        self.device = torch.device("cuda:0" if self.opt.device != 'cpu' else "cpu")
+        #self.device = torch.device("cuda:0" if self.opt.device != 'cpu' else "cpu") #edited in order to run on GPU 
+        self.device = torch.device("cuda")
+
         self.losses = {}
         # # Initialize wandb logger
         # if (self.opt.isTrain):

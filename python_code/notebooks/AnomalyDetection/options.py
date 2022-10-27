@@ -27,7 +27,7 @@ class Options():
         self.parser.add_argument('--batchsize', type=int, default=24, help='input batch size')
         self.parser.add_argument('--isize', type=int, default=64, help='input ES size.')
         self.parser.add_argument('--lsize', type=int, default=15, help='latent space size.')
-        self.parser.add_argument('--device', type=str, default='cpu', help='Device: gpu | cpu')
+        self.parser.add_argument('--device', type=str, default='gpu', help='Device: gpu | cpu') #edited in order to run GPU
         self.parser.add_argument('--name', type=str, default='experiment_name', help='name of the experiment')
         self.parser.add_argument('--outf', default='./output', help='folder to output images and model checkpoints')
 
