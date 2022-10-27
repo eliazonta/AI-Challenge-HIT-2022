@@ -2,11 +2,14 @@ import torch
 from torch import nn
 
 class SingleLSTMCell(nn.Module):
-    def __init__(self, input_size, output_size, batch_size, hidden_dim):
+    def __init__(self, input_size, output_size, batch_size, hidden_dim,device):
         super(SingleLSTMCell, self).__init__()
 
         # Defining some parameters
         self.hidden_dim = hidden_dim
+
+        # Define the torch device
+        self.device = device
 
         # LSTM Cell
         self.lstm1 = nn.LSTMCell(input_size, hidden_dim)
@@ -46,20 +49,20 @@ class SingleLSTMCell(nn.Module):
     
     def init_hidden_and_cell(self, batch_size):
         # This method generates the first hidden state of zeros which we'll use in the forward pass
-        hidden = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
-        cell = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
+        hidden = torch.zeros(batch_size, self.hidden_dim).to(self.device)
+        cell = torch.zeros(batch_size, self.hidden_dim).to(self.device)
          # We'll send the tensor holding the hidden state to the device we specified earlier as well
         return hidden,cell
 
 class LSTM(nn.Module):
-    def __init__(self, input_size, output_size, batch_size, hidden_dim, moving_window):
+    def __init__(self, input_size, output_size, hidden_dim, device):
         super(LSTM, self).__init__()
 
         # Defining some parameters
         self.hidden_dim = hidden_dim
 
-        # Defining the size of the moving window
-        self.moving_window = moving_window
+        # Define the torch device
+        self.device = device
 
         # LSTM Cell
         self.lstm = nn.LSTM(input_size = input_size, hidden_size = hidden_dim, num_layers = 1, 
@@ -96,7 +99,7 @@ class LSTM(nn.Module):
     
     def init_hidden_and_cell(self, batch_size):
         # This method generates the first hidden state of zeros which we'll use in the forward pass
-        hidden = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
-        cell = torch.zeros(batch_size, self.hidden_dim).to(torch.device("cuda"))
+        hidden = torch.zeros(batch_size, self.hidden_dim).to(self.device)
+        cell = torch.zeros(batch_size, self.hidden_dim).to(self.device)
          # We'll send the tensor holding the hidden state to the device we specified earlier as well
         return hidden,cell
