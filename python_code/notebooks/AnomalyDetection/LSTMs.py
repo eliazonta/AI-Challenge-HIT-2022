@@ -78,8 +78,8 @@ class LSTM(nn.Module):
         outputs, batch_size, sequence_length = [], x.size(0), x.size(1)
 
         # initialize hidden and cells
-        h0 = torch.zeros(1, batch_size, self.hidden_dim).requires_grad_()
-        c0 = torch.zeros(1, batch_size, self.hidden_dim).requires_grad_()
+        h0 = torch.zeros(1, batch_size, self.hidden_dim).requires_grad_().to(self.device)
+        c0 = torch.zeros(1, batch_size, self.hidden_dim).requires_grad_().to(self.device)
         x = x.unsqueeze(2)
         # the first part of the output is the already known curve
         outputs = x
@@ -95,7 +95,7 @@ class LSTM(nn.Module):
             # append the predicted point to the output
             outputs = torch.cat((outputs, output.unsqueeze(2)), dim=1)
             
-        return outputs.squeeze(2)
+        return outputs.squeeze(2).to(device)
     
     def init_hidden_and_cell(self, batch_size):
         # This method generates the first hidden state of zeros which we'll use in the forward pass
