@@ -95,7 +95,7 @@ class LSTM(nn.Module):
             # append the predicted point to the output
             outputs = torch.cat((outputs, output.unsqueeze(2)), dim=1)
             
-        return outputs.squeeze(2).to(device)
+        return outputs.squeeze(2).to(self.device)
     
     def init_hidden_and_cell(self, batch_size):
         # This method generates the first hidden state of zeros which we'll use in the forward pass
