@@ -65,7 +65,9 @@ def split_df_for_TSF(df, PERIOD, PREDICTION):
         if((train_window['validation_code'].values != 1).any()):
             current_data +=  pd.offsets.Hour(PREDICTION)
             continue
-        
+        # fix if df is empty no header can be found, error
+        if not(train_window.empty):
+            continue
         header={
         'sensor_code':train_window['label'].values[0],
         'in_datetime':train_window['datetime'].values[0],
