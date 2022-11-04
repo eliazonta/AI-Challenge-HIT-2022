@@ -9,4 +9,10 @@
 * ` /python_code/notebooks/TSF ` codice per il data splitting delle serie temporali
 * ` /python_code/notebooks/converting script ` codice con il convertitore semi-automatico dei dataset
 
-prova 
+## how to run the notebooks on google colab: 
+Clone the repository with its libraries
+`
+!git clone https://github.com/eliazonta/AI-Challenge-HIT
+import sys
+sys.path.append("/content/AI-Challenge-HIT/python_code/notebooks")
+`
