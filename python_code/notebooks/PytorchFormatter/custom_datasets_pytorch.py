@@ -1,8 +1,8 @@
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 
 class CustomDataset(Dataset):
-  def __init__(self, df_train, df_test):
+  def __init__(self, df_train, df_test, n_previsions):
     self.features = torch.FloatTensor(df_train.drop(['sensor_code','in_datetime'],axis=1).values)
     self.target = torch.FloatTensor(df_test.drop(['sensor_code','in_datetime']+[f"val_{idx}" for idx in range(n_previsions)],axis=1).values)
     mean = self.features.mean()
