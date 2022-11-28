@@ -102,8 +102,8 @@ clone the repo with
 git clone https://github.com/eliazonta/AI-Challenge-HIT.git
 ```
 
-
-
+- ## Structure
+![](/CodeScheme.png)
 
 <!-- ## Python code:
 *python_code*  contiene:
