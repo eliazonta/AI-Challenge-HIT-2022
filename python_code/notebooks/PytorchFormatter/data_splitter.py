@@ -2,11 +2,12 @@ import pandas as pd
 
 def split_df_for_TSF(df, PERIOD, PREDICTION, print_every = 500, log_file=None):
     """
-    Split the dataframe df in train and test, accoding to the time division.
+    Split the dataframe df in train and test, accoding to the time division and with anomalies only in test.
     @df: the dataframe, must have a datetime field
     @PERIOD: is the dimension of the train (in hours)
     @PREDICTION: is the dimension of the test (in hours)
     @print_every: how many element to process before printing
+    @log_file: where the log file should be stored. If none is provided, the warning are printed on screen.
 
     for each datetime starting from the minimum in the dataframe,
     split the dataframe in 
@@ -14,7 +15,8 @@ def split_df_for_TSF(df, PERIOD, PREDICTION, print_every = 500, log_file=None):
     and 
     test = df[current_time + PERIOD, current_time + PERIOD + PREDICTION]
 
-    finally return the train and the test and the number of points to be predicted
+    finally return the train and the test and the number of points to be predicted. 
+    This is different from the old implementation because it remove the nans
     """    
     date_min = df['datetime'].min()
     date_max = df['datetime'].max()
@@ -119,6 +121,23 @@ def split_df_for_TSF(df, PERIOD, PREDICTION, print_every = 500, log_file=None):
     return df_train,df_test,n_labels
 
 def split_multiple_df_for_TSF(df, list_sensor_label, PERIOD, PREDICTION, print_every = 500, log_file=None):
+    """
+    Split the dataframe df in train and test, for multiple LSTM.
+    @df: the dataframe, must have a datetime field
+    @PERIOD: is the dimension of the train (in hours)
+    @PREDICTION: is the dimension of the test (in hours)
+    @print_every: how many element to process before printing
+    @log_file: where the log file should be stored. If none is provided, the warning are printed on screen.
+
+    for each datetime starting from the minimum in the dataframe,
+    split the dataframe in 
+    train = df[current_time, current_time + PERIOD]
+    and 
+    test = df[current_time + PERIOD, current_time + PERIOD + PREDICTION]
+
+    finally return the train and the test and the number of points to be predicted. 
+    
+    """    
     date_min = df['datetime'].min()
     date_max = df['datetime'].max()
     current_date = date_min
