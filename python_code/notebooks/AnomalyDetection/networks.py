@@ -20,8 +20,7 @@ class LSTM(nn.Module):
 
         # Fully connected layer
         self.fc = nn.Linear(hidden_dim, output_size)
-        # Initializing hidden state only once
-        # self.hidden,self.cell = self.init_hidden_and_cell(batch_size)
+
 
     def forward(self, x, pred_fut=0):
         outputs, batch_size, sequence_length = [], x.size(0), x.size(1)
@@ -45,17 +44,10 @@ class LSTM(nn.Module):
             outputs = torch.cat((outputs, output.unsqueeze(2)), dim=1)
             
         return outputs.squeeze(2).to(self.device)
-    
-    def init_hidden_and_cell(self, batch_size):
-        # This method generates the first hidden state of zeros which we'll use in the forward pass
-        hidden = torch.zeros(batch_size, self.hidden_dim).to(self.device)
-        cell = torch.zeros(batch_size, self.hidden_dim).to(self.device)
-         # We'll send the tensor holding the hidden state to the device we specified earlier as well
-        return hidden,cell
 
 class LSTM_multiple_stations(nn.Module):
     def __init__(self, input_size, output_size, hidden_dim, num_layers, device):
-        super(LSTM, self).__init__()
+        super(LSTM_multiple_stations, self).__init__()
 
         # Defining some parameters
         self.hidden_dim = hidden_dim
@@ -72,8 +64,6 @@ class LSTM_multiple_stations(nn.Module):
 
         # Fully connected layer
         self.fc = nn.Linear(hidden_dim, output_size)
-        # Initializing hidden state only once
-        # self.hidden,self.cell = self.init_hidden_and_cell(batch_size)
 
     def forward(self, x, pred_fut=0):
         outputs, batch_size, sequence_length = [], x.size(0), x.size(1)
@@ -81,7 +71,7 @@ class LSTM_multiple_stations(nn.Module):
         # initialize hidden and cells
         h0 = torch.zeros(self.num_layers, batch_size, self.hidden_dim).requires_grad_().to(self.device)
         c0 = torch.zeros(self.num_layers, batch_size, self.hidden_dim).requires_grad_().to(self.device)
-        # x = x.unsqueeze(2)
+        
         # the first part of the output is the already known curve
         outputs = x
         
@@ -90,8 +80,6 @@ class LSTM_multiple_stations(nn.Module):
             
             # selection of the window
             outputs_window = outputs[:,i:sequence_length+i,:]
-            # print(outputs_window.size())
-            # print(h0.size())
             output, (h0, c0) = self.lstm(outputs_window, (h0, c0))
             output = self.fc(h0[0])
             output = nn.LeakyReLU(negative_slope=0.3)(output)
@@ -99,10 +87,3 @@ class LSTM_multiple_stations(nn.Module):
             outputs = torch.cat((outputs, output.unsqueeze(1)), dim=1)
             
         return outputs.to(self.device)
-    
-    def init_hidden_and_cell(self, batch_size):
-        # This method generates the first hidden state of zeros which we'll use in the forward pass
-        hidden = torch.zeros(batch_size, self.hidden_dim).to(self.device)
-        cell = torch.zeros(batch_size, self.hidden_dim).to(self.device)
-         # We'll send the tensor holding the hidden state to the device we specified earlier as well
-        return hidden,cell
