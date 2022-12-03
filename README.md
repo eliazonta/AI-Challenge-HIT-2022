@@ -7,6 +7,7 @@
 2. [Repository Usage](#repousage)
     - [Depencencies](#dependencies) 
     - [Run the code](#runthecode) 
+    - [Structure](#repostructure)
 
 -----------------------
 
@@ -101,6 +102,8 @@ clone the repo with
 ```shell
 git clone https://github.com/eliazonta/AI-Challenge-HIT.git
 ```
+
+<a name="repostructure" />
 
 - ## Structure
 ![](/CodeScheme.png)
